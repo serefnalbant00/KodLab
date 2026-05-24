@@ -1,4 +1,61 @@
-function tamDenetimliCalistir() {
+// 🛡️ SYSTEM-GUARD MODÜLÜ (JavaScript Destekçisi)
+const DestekModulu = {
+    // 1. Güvenlik Taraması: Zararlı karakterleri temizler
+    guvenlikKontrol: (input) => {
+        const yasakliKarakterler = /<script>|alert\(|eval\(/gi;
+        return input.replace(yasakliKarakterler, "[TEMİZLENDİ]");
+    },
+
+    // 2. Zaman Damgası: İşlemlerin ne kadar sürdüğünü hesaplar
+    zamanlayici: () => {
+        return new Date().toLocaleTimeString('tr-TR');
+    },
+
+    // 3. Sistem Durumu: Bellek ve Bağlantı durumunu simüle eder
+    sistemRaporu: () => {
+        const diller = ["C++ Engine", "HTML5", "JS Runtime"];
+        return diller[Math.floor(Math.random() * diller.length)];
+    }
+};
+
+// Loglama fonksiyonunu tüm sisteme yayalım
+function sistemLog(mesaj, tip = "bilgi") {
+    const renk = tip === "hata" ? "#ff4500" : "#0fff41";
+    console.log(`%c[${DestekModulu.zamanlayici()}] ${mesaj}`, `color: ${renk}; font-weight: bold;`);
+}
+            // script.js (Destekçi ile Güçlendirilmiş)
+
+async function sistemiCalistir() {
+    const hamKod = document.getElementById('dev-code').value;
+    const zone = document.getElementById('status-zone');
+    
+    // DESTEKÇİ DEVREDE: Önce güvenlik kontrolü
+    const temizKod = DestekModulu.guvenlikKontrol(hamKod);
+    sistemLog("Güvenlik taraması tamamlandı. Modül: " + DestekModulu.sistemRaporu());
+
+    zone.innerHTML = "<div class='loading'>SİSTEM ANALİZ EDİLİYOR...</div>";
+
+    try {
+        // Gerçek API Sorgusu
+        const response = await fetch('https://randomuser.me/api/');
+        const data = await response.json();
+        
+        sistemLog("API verisi başarıyla çekildi.");
+
+        // Başarılı Sonuç
+        zone.innerHTML = `
+            <div class='success-panel'>
+                <h3>✅ ERİŞİM BAŞARILI</h3>
+                <p>Analiz Edilen Dil: ${temizKod.includes('int') ? 'C++' : 'Web/HTML'}</p>
+                <p>Zaman: ${DestekModulu.zamanlayici()}</p>
+            </div>
+        `;
+    } catch (error) {
+        sistemLog("HATA: Sunucu bağlantısı başarısız!", "hata");
+        zone.innerHTML = "<p style='color: red;'>Kritik Veritabanı Hatası!</p>";
+    }
+            }
+            function tamDenetimliCalistir() {
     const editor = document.getElementById("kod-input"); 
     const terminal = document.getElementById("terminal-ekranı");
     const onizleme = document.getElementById("onizleme-frame");
@@ -45,6 +102,32 @@ function tamDenetimliCalistir() {
             doc.close();
         }
     }, 200); // 200ms hızında akar
-}
+        }function tamDenetimliCalistir() {
+    const editor = document.getElementById("kod-input"); 
+    const terminal = document.getElementById("terminal-ekranı");
+    const onizleme = document.getElementById("onizleme-frame");
+    const kod = editor.value.trim();
 
+    // 1. ADIM: HATA AYIKLAMA (VALIDATION)
+    // Bu kontrol; içinde <...>, { ... } veya <style> barındırmayan her şeyi reddeder.
+    const htmlKontrol = /<[a-z][\s\S]*>/i; // HTML etiketi var mı?
+    const cssKontrol = /\{[\s\S]*\}/;      // CSS süslü parantezi var mı?
+    
+    if (!htmlKontrol.test(kod) && !cssKontrol.test(kod)) {
+        terminal.innerHTML = `<div style="color: #ff4d4d;">
+            [KRİTİK HATA]: Kod yapısı çözümlenemedi.<br>
+            > Sebep: Geçersiz karakter dizisi veya eksik etiket.<br>
+            > Durum: Simülasyon durduruldu.
+        </div>`;
+        return; // Yanlış kodsa burada durur, aşağıya geçmez.
+    }
 
+    // 2. ADIM: KODLARI DÖNDÜRME (SİMÜLASYON)
+    terminal.innerHTML = "<b>> Çekirdek denetleniyor...</b>";
+    
+    let islemBasliklari = [
+        "> Sözdizimi ağacı (AST) oluşturuluyor...",
+        "> Etiket hiyerarşisi doğrulanıyor...",
+        "> CSS seçicileri eşleştiriliyor...",
+        "> Bellek sızıntısı kontrol ediliyor...",
+        "> BAŞARILI: Çıktı render ediliyor."
